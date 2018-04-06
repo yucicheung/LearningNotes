@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if test "ABC" = "abc";then
+echo ABC=abc
+else
+echo ABC!=abc
+fi
+if [ "ABC" = "ABC" ];then
+echo ABC=ABC
+else
+echo ABC!=ABC
+fi

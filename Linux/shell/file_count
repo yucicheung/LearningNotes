@@ -1,0 +1,14 @@
+#!/bin/bash
+
+count=0
+
+for file in `ls`
+do
+	#echo $file
+	if ! [ -d $file ]
+	then
+		let count=$count+1
+	fi
+done
+
+echo "file counts are $count"

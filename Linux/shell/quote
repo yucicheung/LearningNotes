@@ -1,0 +1,13 @@
+#! /bin/bash
+
+log=Saturday
+
+#双引号对美元符号进行解释
+echo "Today is $log."
+
+#单引号对美元符号不解释
+echo 'Today is $log.'
+
+#倒引号对命令执行，双引号对倒引号进行执行
+echo "Today is `date`."
+

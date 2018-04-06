@@ -1,0 +1,5 @@
+#!/bin/bash
+
+int1=2;int2=3
+
+if [ $int1 -lt $int2 ]; then echo "right";fi

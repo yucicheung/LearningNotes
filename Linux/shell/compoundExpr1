@@ -1,0 +1,7 @@
+#!/bin/bash
+# 当用户提供的文件存在并且vim编辑器存在，就先备份，然后调用vim编辑器
+
+if [ -f $@ -a -x /usr/bin/vim ]; then 
+	cp $@ $@.bak
+	vim $@
+fi

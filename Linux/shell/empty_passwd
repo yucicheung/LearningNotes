@@ -1,0 +1,7 @@
+#!/bin/bash
+
+read password
+
+if test -z $password;then
+	echo "please enter password."
+fi

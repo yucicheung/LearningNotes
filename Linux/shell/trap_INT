@@ -1,0 +1,8 @@
+#!/bin/bash
+
+trap 'echo "Type quit to exit"' INT
+
+while [ "$input" != "quit" ]
+do
+	read input
+done

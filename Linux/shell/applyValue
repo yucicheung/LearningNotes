@@ -1,0 +1,11 @@
+#! /bin/bash
+num=1
+# ouput 1+2
+num=$num+2
+echo $num
+# output 3
+num=$[$num]
+echo $num
+# base 2
+ans=$[2#10+1]
+echo "\$[2#10 + 1] is $ans"

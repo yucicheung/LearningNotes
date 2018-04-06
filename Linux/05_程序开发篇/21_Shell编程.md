@@ -59,6 +59,8 @@ $ egrep '^a.*t$' /usr/share/dict/words | wc -c
   - 从左到右，第i个出现的子表达式编号为i。
 
 ## Shell脚本编程
+- Shell本身就是一个命令解释器(而不是一门编程语言)，所以可以在shell中运行命令(执行程序，命令就是语句的组合);
+- Shell本身都是同一个程序`/bin/bash`，子/父shell是指他们之间的调用关系。
 ### hello world
 - Shell因为分许多种类，严格说这里学习的应该BASH编程。
 - Shell脚本语言不需要编译(并不能说'脚本语言一定不需要编译/解释型语言不需要编译')。
@@ -66,7 +68,7 @@ $ egrep '^a.*t$' /usr/share/dict/words | wc -c
   - 第一行总是以`#!`开头，指定脚本的运行环境，`#! /bin/bash`告诉shell运行此脚本应该使用的shell(可以省略但不是一个好习惯);
   - `#`表示注释;
   - `echo`执行时会自动加上一个换行符;
-  - 文本加上可执行权限之后才能变成脚本执行，`chmod a+x hello`。
+  - 文本加上可执行权限之后才能变成脚本执行，`chmod a+x hello`/`chmod +x hello`。
 ```
 #! /bin/bash
 #Display a line
@@ -78,7 +80,265 @@ echo 'Hello world!' #echo会在最后自动加上一个换行符
   - Shell中变量使用之前不用事先声明(脚本语言貌似都如此);
   - `=`：赋值符号，如`var=1`就是给var赋值，**注意'='两边不能有空格**;
   - `$`:shell编程中用于对一个变量进行解析，表示取得变量的值;
-  - `source`：一般变量只在其所在的"脚本"中有效，shell中不可见其值，但`source`命令可以**让一个脚本影响其父Shell环境**，使值在shell中可见;
-  - `export`：可以让脚本影响其子shell环境;
+  - `source`/`.`：一般变量只在其所在的"脚本"中有效，shell中不可见其值，但`source`命令可以**让一个脚本影响其父Shell环境**(当前执行脚本的shell及其父shell)，使值在shell中可见;
+  - `export`：可以让脚本影响其子shell环境(子shell是在执行脚本中`sh`命令调用的shell);
+  - 在配置脚本(父shell)中命令要影响shell用`export`，在shell中要影响配置脚本用`source`;
   - `unset`:手动注销一个变量。
-- 
+- 变量替换：
+  - `\`：转义字符，如果要输出特殊字符时使用(类所有编程语言)，如`\$`输出美元符号;
+  - `{}`：限定变量的开始和结束(类python)，似乎笔记但**只能使用""而非''**，如：
+```bash
+#! /bin/bash
+word="big"
+echo "The apple is ${word}."
+```
+- 位置变量：依次序获取各命令行参数;
+  - `$0`：表示第一个**命令行参数**，这个参数总是脚本的名字;
+  - `$n`：表示第n个**参数**(不包括脚本名);
+  - `${n}`:当n为一位数以上时，需要用大括号将位置序号括起来;
+  - `$*`/`$@`:**参数**列表(不包括脚本名);
+  - `$#`：包含参数个数(参数列表长度)。
+```bash
+#!/bin/bash
+# 是$@最常见的用法
+#! /bin/bash
+echo "$# files to list:"
+
+for file in $@
+do
+	ls -l $file
+done
+```
+- **BASH引号规则**：
+  - `""`：双引号，阻止Shell对大多特殊字符(如#)进行解释，但$/`/"仍保持其特殊含义;
+  - `''`：单引号，阻止shell对所有字符进行解释;
+  - `\``：倒引号，当倒引号括起一个shell命令时，该命令将被执行，执行后的输出结果将作为表达式的值，倒引号中的特殊字符一般都被解释。
+- 运算符：shell完全复制了C语言中的运算符和优先级规则。日常只使用其中部分即可，数学运算并不是shell的强项。所有可用的运算符如下，优先级从高到低：
+  - -，+：[[单目[负 正]](单目负取反，单目正没有意义)[减 加]];
+  - !，||,&&：逻辑[非 或 与];
+  - ~，&，^，|,>>，<<：按位[取反 与 异或 或 右移 左移];
+  - <=，>=,<,>,==,!=：[小于等于 大于等于 小于 大于 等于 不等于];
+  - *,/,%：[乘 除 取模];
+  - =,[+-*/%&^|(<<)(>>)]=：赋值，运算并赋值。
+  - 同样可用`()`改变优先级;
+- shell中相等可以用`=`和`==`表示，因为`=`赋值时两边无空格(因为变量不是命令不能分开，而整个语句才能算是一个命令)，而表示比较时两边有空格。
+### 表达式求值
+- `$[]`：求值后整体赋值。
+  - `[base#]n`可以表示从2到36进制的任何一个n值（默认十进制），如2#10表示二进制数10;
+  - `$[]`可以接受不同基数的数字求值；
+  - 举个例子，如下第一段输出结果是`1+2`，因为shell是一种**弱类型**的语言，换言之shell不知道num的类型，因此只能简单取得$num将整个表达式赋值。如果按第二段就能计算后再输出结果。
+```bash 
+#! /bin/bash
+num=1
+# ouput 1+2
+num=$num+2
+echo $num
+# output 3
+num=$[num]
+```
+- `expr`命令也对表达式执行求值操作，可以允许更复杂的表达式。
+- `let`：此命令也指导shell进行表达式求值，功能类似`$[]`，命令右边的表达式不能有空格，如`let num=$num+1`会输出值而非表达式。
+### 脚本执行命令和控制语句
+- if条件语句格式(**每个if语句都必须用fi结尾**)：
+  - 格式1:`if-then-fi`;
+  ```bash
+  if test-commands
+  then
+  	commands
+  fi
+  ```
+  - 格式2：`if-then-elif-then-else-fi`,当然各条件语句之间必须互斥;
+  ```bash
+  if test-command-1
+  then
+  	commands-1
+  elif test-command-2
+  then
+  	commands-2
+  elif test-command-3
+  then
+  	commands-3
+  else
+  	commands-4
+  fi
+  - **注意**(由例子):
+  - (1)条件判断语句中`[`/`]`与表达式之间必须有空格，`=`两边必须有空格;
+  - (2)条件语句后可以跟`;`也可以不跟，只是用于分隔语句;
+  - (3)字符串可以用`""`包围，也可以不用，等号左边的表达式/前面有`$`的是变量，否则可以自动认为是字符串。
+  ```
+```bash
+#! /bin/bash
+# if例子
+echo "Enter password:"
+read password
+echo $password
+
+if [ "$password" = john ];then
+	echo "Hello John"
+elif [ "$password" = mike ];
+then
+	echo "Hello Mike"
+elif [ "$password" = lewis ]
+then
+	echo "Hello Lewis"
+else
+	echo "I don't know you,go away"
+fi
+```
+- case多选结构：用于在一系列模式中匹配某个变量的值;
+  - 基本语法：
+	```bash
+	case word in
+		pattern1)
+			commands1
+			;;
+		pattern2)
+			commands2
+			;;
+		...
+		patternN)
+			commandsN
+			;;
+	esac
+	```
+  - **注意**(将if例子用case重写)：
+  - (1) `;;`相当于C语言中的`break`，shell遇见时会跳转到case结构的最后，但是Shell中`;;`是不能省略的;
+  - (2)case语句是逐条检索匹配的;
+  - (3)case结构最后一个模式通常用`*)`，因`*`用于匹配所有的字符串;
+```bash
+#! /bin/bash
+# an example of case
+# note $n means nth input params
+# 重写if例子
+case $1 in
+	john)
+		echo "Hello John!"
+		;;
+	mike)
+		echo "Hello Mike!"
+		;;
+	lewis)
+		echo "Hello Lewis!"
+		;;
+	*)
+		echo "Go away!!"
+		;;
+esac
+```
+### 条件测试
+- `if`判断的依据是程序的返回值(0为真/正常，非0为假/出错序号)：
+  - `if`接受一个程序名作为参数，根据执行程序的返回值判断是否执行：
+  - (1)如果返回值为0，表示True;
+  - (2)如果返回值为1，表示False。
+- 例子如下，只有返回值为0的第2条if语句成功执行。
+```bash
+#!/bin/bash
+
+if ./testscript -1
+then
+	echo "testscript exit -1"
+fi
+
+if ./testscript 0
+then
+	echo "testscript exit 0"
+fi
+
+if ./testscript 1
+then
+	echo "testscript exit 1"
+fi
+#----------testscript--------
+#!/bin/bash
+#表示退出并返回输入所有参数
+exit $@
+```
+
+- `test`命令和空格的使用：
+  - `test`:if语句既然只接受程序名为参数，所以if的条件判断需要引入一个特定的命令即`test`，也是`[`方括号的同义词;
+  - 关于空格：
+  - (1)`test`和`[`都是`/usr/bin`下的命令，而判断的字符串(...)和`=`及`]`都是要求输入的参数，参数之间必须要空格分开(**!!在赋值语句中`=`两边一定没有空格**);
+  - (2)总的来说，空格在shell这个命令解释器中的作用就是分隔命令与参数/参数与参数。
+- `test`/`[`命令可以对以下3类表达式进行测试(可以在`man test`中看到详细内容)：
+  - 字符串比较(字符串相等/字符串是否为空)：
+    - **引号的使用**：Bash中给字符串两边加`""`不是必要的，因为Bash会自动给没有值的变量加上引号（但是有些shell不如此）,为保证清晰性和可移植性应为字符串变量加上引号。
+	| 选项 | 描述 |
+	| --- | --- |
+	| -z str | 当字符串str长度为0时返回真 |
+	| -n str | 当字符串长度不为0时返回真 |
+	| str1 = str2 | 相等时返回真 |
+	| str1 != str2 | 不等时返回真 |
+  - 文件测试：用于判断一个文件是否满足特定的条件;
+	| 选项 | 描述 |
+	| --- | --- |
+	| -d pathname | 是目录时返回真 |
+	| -e pathname | 指定文件或目录存在时为真 |
+	| -f file | 是常规文件(非符号链接、管道、目录等)时为真 |
+	| -h file | 是符号链接文件时返回真 |
+	| -[rwx] pathname | 当指定的文件或目录设置了可[读 写 执行]|权限时为真 |
+  - 数字比较：只能用于比较正/负整数`test int1 option int2`/`[ int1 option int2 ]`;
+	| 选项 | 描述 |
+	| --- | --- |
+	| -eq | int1 == int2 |
+	| -ne | int1 != int2 |
+	| -lt | int1 < int2 |
+	| -gt | int1 > int2 |
+	| -le | int1 <= int2 |
+	| -ge | int1 >= int2 |
+  - 复合表达式：用逻辑(与或非)串起的多个表达式；
+	- **注意**：Shell的内建条件操作符`&&`或`||`可以代替下面的`-a`和`-o`；前者连接两条`[`或`test`语句，逻辑清晰;后者只用一条`[`/`test`语句，执行效率相对更高；如｀[ -f $@ -a -x /usr/bin/vim ]｀等于`[ -f $@ ] && [ -x /usr/bin/vim ]`．
+	| 操作符 | 描述 |
+	| --- | --- |
+	| !expr | "非"运算 |
+	| expr1 -a expr2 | "与"运算 |
+	| expr1 -o expr2 | "或"运算 |
+### 循环结构
+- Shell中的循环结构有3种:(1)while;(2)until;(3)for;
+- 条件测试时不能忘记`$`符号;
+- `while`语句：
+  - 基本结构：
+	```bash
+	while test-commands
+	do
+		commands
+	done
+	```
+  - `while`语句的测试条件除了使用`test`,`[`函数，还可以利用函数`read`等的返回值。
+- `until`语句：和`while`功能完全一样，但是测试条件相反。
+  - 基本语法，直到条件成立才停下：
+	```bash
+	until test-commands
+	do
+		commands
+	done
+	```
+- `for`语句：从列表/值表中逐一读取值进行操作，直到取完所有的值;
+  - **值表**：一系列以空格分隔的值;
+  - `seq`:此命令自动接受一个参数n，产生1到n(均包含)的值表;
+  - 基本用法：
+	```bash
+	for variable [in list]
+	do
+		commands
+	done
+	```
+- `read`:读取用户输入;
+  - 三种模式：
+	- (1)接受一个变量名作为参数，从标准输入中接收到的信息存放在该变量中;
+	- (2)不提供变量名，读取的信息将放在变量`REPLY`中;
+	- (3)提供多个变量名作为参数，Bash默认空格、制表符和换行符为分隔符，将输入拆开分别赋值给各变量;
+  - `read`常用来在输出一段内容后暂停，等待用户的下一步指令(如“继续”)。
+### 脚本执行命令
+- `exit`：强行退出一个脚本，并向调用脚本的**父进程**返回一个整数值;
+  - 进程成功运行，返回值是0，非0值表示发生某种异常;
+  - 简要用法是`exit n`。
+- `trap`：用于捕捉一个信号，如进程通信中，*用于捕捉且忽视一个信号*;
+  - ？？？执行顺序是怎样的？？？
+#!/bin/bash
+
+trap 'echo "Type quit to exit"' INT
+
+while [ "$input" != "quit" ]
+do
+	read input
+done

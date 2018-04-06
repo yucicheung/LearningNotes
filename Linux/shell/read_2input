@@ -1,0 +1,7 @@
+#!/bin/bash
+
+read first second
+
+echo "1st input is $first"
+echo "2nd input is $second"
+

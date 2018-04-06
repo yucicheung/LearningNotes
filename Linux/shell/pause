@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ls -l
+
+echo "Press <ENTER> to continue"
+read
+
+echo "END"

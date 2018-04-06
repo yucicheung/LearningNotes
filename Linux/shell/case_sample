@@ -1,0 +1,19 @@
+#! /bin/bash
+# an example of case
+# note $n means nth input params
+
+case $1 in
+	john)
+		echo "Hello John!"
+		;;
+	mike)
+		echo "Hello Mike!"
+		;;
+	lewis)
+		echo "Hello Lewis!"
+		;;
+	*)
+		echo "Go away!!"
+		;;
+esac
+

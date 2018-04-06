@@ -1,0 +1,3 @@
+#! /bin/bash
+export count=5
+sh

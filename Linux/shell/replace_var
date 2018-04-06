@@ -1,0 +1,3 @@
+#! /bin/bash
+word="big"
+echo "This is a ${word} apple."

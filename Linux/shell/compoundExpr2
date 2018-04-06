@@ -1,0 +1,11 @@
+#!/bin/bash
+#变量password为非空或者密码文件.public_key存在时向父进程返回0,否则提示用户输入口令
+read password
+
+if [ -n $password -o -f ~/.public_key ]
+then
+	exit 0
+else
+	echo "Enter password:"
+	read password
+fi
