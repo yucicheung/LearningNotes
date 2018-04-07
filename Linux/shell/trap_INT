@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# 只能放在文件首，才能及时捕获信号
 trap 'echo "Type quit to exit"' INT
 
+# 最开始没有input,值为空字符串
 while [ "$input" != "quit" ]
 do
 	read input

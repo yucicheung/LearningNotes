@@ -1,0 +1,8 @@
+#!/bin/bash
+# 调用子shell实现功能
+# 要在shell中直接敲入命令
+# 否则只在子shell中改变路径
+
+dirname=~/LearningNotes/git
+#echo $dirname
+test -d $dirname && cd $dirname

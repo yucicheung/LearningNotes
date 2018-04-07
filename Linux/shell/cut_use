@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ls > ls_file
+[ -d cut_dir ] || mkdir cut_dir
+mv ls_file cut_dir
+cd cut_dir
+
+cut -c1-3 ls_file >> cut_ls_file
