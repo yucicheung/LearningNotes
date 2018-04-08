@@ -1,3 +1,5 @@
+# git使用笔记碎片
+## 其他概念
 Gist用于管理和发布一些没必要保存在仓库中的代码。
 ## TaskList语法
 - [ ]
@@ -12,7 +14,8 @@ git checkout -- <filename>
 git fetch origin
 git reset --hard origin/master
 
-## 新建分支
+## 分支新建和管理
+### 新建分支
 ```bash
 $ git checkout -b dev
 $ git branch #可见所在分支
@@ -21,26 +24,27 @@ $ git branch #可见所在分支
 ```bash
 $ git push origin dev
 ```
-## 对新分支的处理
+### 查看新分支
 ```bash
 $ git branch -r # 查看远程repo
 $ git checkout origin/hexo
 ```
 git reset之间区别：http://www.cnblogs.com/kidsitcn/p/4513297.html
-## 新分支合并到主分支
+### 新分支合并到主分支
 对远程新分支，合并到主分支master
 ```
 $ git checkout master
 $ git merge --no-ff dev
 $ git log --graph
 ```
-## 一次性提交
+
+## 提交和记录管理
+### 一次性提交
 `git add .`和`git commit -m message`
 ```bash
 $ git commit -am message
 ```
 
-## 提交记录
 ### 修改
 修改上一条提交信息。
 ```bash

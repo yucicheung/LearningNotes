@@ -1,0 +1,30 @@
+#!/bin/bash
+# 将文件删除到主目录下的./trash文件中
+
+if ! [ -d ~/.trash ] 
+then
+	mkdir ~/.trash
+fi
+
+if [ $# = 0 ]
+then
+	echo "[Usage]: delete file1 file2 ..."
+else
+	echo "You are about to delete these files:$@"
+	echo "Are you sure you want to delete these files?(y/n)"
+	read
+	if [ $REPLY = 'Y' ] || [ $REPLY = 'y' ]
+	then
+		for file in $@
+		do
+			if [ -f $file ] || [ -d $file ]
+			then
+				mv -b $file ~/.trash
+			else
+				echo "$file :No such file or directory."
+			fi
+		done
+	else
+		echo "Bye"
+	fi
+fi
