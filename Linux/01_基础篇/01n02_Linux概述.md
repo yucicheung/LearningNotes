@@ -4,6 +4,7 @@
 - Linux开发人员最初是借鉴了UNIX的技术和用户界面，并且融入了很多独创的技术改进，从这方面可以说Linux是UNIX的一个变体。但是从开发形式(社区支持)和最终产生的源代码来看，Linux不属于BSD和AT&T风格中的任一种，因此严格说来，Linux是有别于UNIX的操作系统。
 - Linux实际上**只定义一个操作系统内核**，以同一个基础开始，却衍生了不同的发行版本。以下表格列出著名的Linux发行版本(按**源版本**和衍生版本划分)
 | 发行版本 | 官方网站 | 说 明 |
+| --- | --- | --- |
 | **Red Hat Enterprise** | www.redhat.com | Red Hat公司的企业级商业化发行版本 |
 | Fedora | fedoraproject.org | Red Hat公司赞助的社区项目免费发行版本 |
 | CentOS | www.centos.org | 模仿Red Hat Enterprise Linux的非商业发行版本 |
