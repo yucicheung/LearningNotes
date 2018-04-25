@@ -7,5 +7,5 @@
   - Html and CSS
 
 ## 使用说明
-- 笔记文件用`markdown`书写，基于不同markdown编辑器对格式支持和渲染效果不同，所有笔记只保证在`typora`编辑器中成功渲染。
+- 笔记文件用`markdown`书写，基于不同markdown编辑器对功能支持和渲染效果不同，所有笔记只保证在`typora`编辑器中成功渲染。
 
