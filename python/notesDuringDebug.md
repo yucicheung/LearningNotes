@@ -23,3 +23,15 @@
 - 查看已安装包(pip)的信息，如查找不到可能是通过`apt`安装，此时可以通过`dpkg -l`+`grep`查找并查看相关信息：
   - `pip list`
   - `pip freeze`
+
+## diactionary
+- get() method
+  - dict.get(key,default=None)
+	- if key exists,return dict[key],otherwise return dict[default]
+- File seek() method:
+  - fileObject.seek(offet[, whence])
+	- offset:the bytes to be offset from 
+	- whence: the default position, set as 0 by default.o for starting from the beginning, 1 for starting from the current position, 2 for starting from the end of the file.
+- File `tell()`
+  - shows where the pointer is now.
+
