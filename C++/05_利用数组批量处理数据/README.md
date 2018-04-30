@@ -114,7 +114,7 @@ max(a)
 //以下数组长度被系统分配为11，由于含`\0`
 char str[]={"I am happy"};
 //或省去花括号
-charstr[]="I am happy";
+char str[]="I am happy";
 ```
 - 赋值
   - **只能对字符数组的元素赋值**，而不能用赋值语句对整个数组赋值。
