@@ -7,6 +7,24 @@
   - ctrl+s会暂停终端，ctrl+q重新唤起终端
   - ctrl+c中止正在执行的程序
   - ctrl+d退出终端
+## GCC/G++调试笔记
+- g++命令相关
+  - 用于产生可调试的文件
+	```shell
+	g++ -g *.cpp -o [*.out]
+	```
+  - 规定C++11标准
+	```shell
+	g++ -std=c++11 *.cpp -o [*.out]
+	```
+- 段错误(segmentation fault)调试经验
+  1. 应该用`g++ -g`命令产生可以进行调试的`.out`文件;
+  2. `gdb *.out`文件准备进行调试;
+  3. 在调试过程中，用`r`运行程序使之显示段错误信息，并且提示具体的段错误signal。
+  4. 根据提示`see signal(7)`查看响应的错误信息，用`man 7 signal`查看`Standard signals`的含义，因此可以了解响应的错误原因。
+
+- 使用`objdump -d a.out [> a.outDump]`可以将目标文件(汇编代码输出进行查看)。
+
 ## shell编程
 ### 字符串处理
 - 字符串裁剪
