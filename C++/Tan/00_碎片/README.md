@@ -16,6 +16,6 @@
 
 ## 调试问题
 - `munmap_chunk(): invalid pointer`
-  - 一般是malloc动态分配的指针变量，在程序中间指向了其他地方，在free时发现不是动态分配的指针，free失败，返回Invalid pointer错误。
+  - 一般是malloc函数/new操作符动态分配的指针变量，在程序中间指向了其他地方，在free函数/delete操作符时发现不是动态分配的指针，free失败，返回Invalid pointer错误。
 - 段错误
 
