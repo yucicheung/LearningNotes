@@ -70,4 +70,7 @@ $ git remote #查看远程仓库
 $ git fetch origin master #从远程获取最新代码到本地
 $ git log -p master origin/master #比较本地和远程的差别
 $ git merge origin/master # 将下载好的远程代码与本地仓库合并
+$ git pull origin master # 将远程的对应分支的代码拉取到本地并与本地代码合并，相当于先做git fetch再做git merge.
 ```
+
+

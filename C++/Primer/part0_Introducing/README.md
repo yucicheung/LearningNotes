@@ -1,0 +1,16 @@
+# Chapter 1.开始
+- 在UNIX和Windows系统中，执行完一个程序后，都可以使用`echo`命令获得其返回值
+  - UNIX中，`$ echo $?`;
+  - Windows中，`echo %ERRORLEVEL%`。
+- GNU(GNU's not UNIX)和微软编译器的运行
+  - For GNU,`g++ -o file.cpp file.out [-std=c++11]`;
+  - For VS,`C:\Users\me\Programs> c1 /EHsc prog1.cpp`其中c1调用编辑器，/EHsc为编译器选项，用来打开标准异常处理，微软编译器会自动生成一个可执行文件，名字和源文件一致;
+- 输入和输出
+  - 采用流的形式，**一个流就是一个字符序列**，是从IO设备读出或写入IO设备的，**流要表达的意思是，随着时间的推移，字符是顺序生成或消耗的**。
+  - iostream标准库中定义的IO对象
+	- `cin`:标准输入，istream类型;
+	- `cout`：标准输出，ostream类型;
+	- `cerr`：标准错误，ostream类型;
+	- `clog`：输出运行时的一般信息，允许重定向，ostream类型。
+  - `<<`是输出运算符，计算返回左侧运算对象，即写入给定值的ostream对象，也是因此输出请求才可以连接起来。
+  - 
