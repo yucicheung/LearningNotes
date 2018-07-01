@@ -56,4 +56,3 @@
 - `/proc/cpuinfo`：查看cpu信息。
 - `/proc/meminfo`/`free`：查看内存信息。
 - `head -n`：结合管道和`head`可以将前一条命令的前n条信息输出。
-

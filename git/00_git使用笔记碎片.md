@@ -1,6 +1,17 @@
 # git使用笔记碎片
+- More tips on [gist](https://gist.github.com/yucicheung/cda2d4ed5aa70102c94644fdc1423010).
 ## 其他概念
-Gist用于管理和发布一些没必要保存在仓库中的代码。
+- `Gist`：用于方便地和其他人分享一些短的代码片和短的笔记等;
+- `Wiki`：用于添加一些与项目相关的文件和信息等(对于README已经写的很完善的情况，可能写一个wiki不是很有必要)，有一个特性是，可以使所有人都获得其编写权限。
+上述描述的每一个概念，都是一个单独的git仓库，即可以进行clone,fork，版本回退等操作。
+
+- `Release`和`tag`
+  - `tag`准确的就仅仅是打标签而已，对于某个特定版本的仓库快照打上标记;
+  - `Release`功能是对一个特定版本打上标签，并且添加更多详尽的说明,如'Release Notes'等。
+
+- `git reflog`和`git log`
+  - `git reflog`记录从你clone到本地以后，你在本地的所有HEAD变化操作;
+  - `git log`记录该仓库从创建开始到现在的所有commit记录。
 ## TaskList语法
 - [ ]
 - [x]
@@ -74,3 +85,12 @@ $ git pull origin master # 将远程的对应分支的代码拉取到本地并�
 ```
 
 
+- 查看远程分支
+  - `git remote -v`
+- 查看远程分支和本地分支的关联关系。
+
+- 切换远程分支`git checkout origin`
+
+## 仓库的tag管理
+- `git tag`查看所有tag
+- `git tag -m ''`打标签同时增加注释。 
