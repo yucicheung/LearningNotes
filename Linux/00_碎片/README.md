@@ -1,4 +1,7 @@
 # Linux相关知识碎片整理
+## 软件包管理
+- `dpkg -l`查看所有安装的软件包。
+
 ## 文件查找
 - `find <root_dir> -name <keyword>`
   - 例如`find / -name config.py`
