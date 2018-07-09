@@ -1,8 +1,12 @@
 # Linux相关知识碎片整理
+## 软件包管理
+- `dpkg -l`查看所有安装的软件包。
+
 ## 文件查找
 - `find <root_dir> -name <keyword>`
   - 例如`find / -name config.py`
 ## vim
+- 快速跳到某行：输入`n`即跳到第`n`行。
 - 多行复制
   - esc,ctrl-v进入列编辑模式，选择要编辑到的最后一行，并按`$`，否则要求对齐;
   - `P`进行粘贴。
