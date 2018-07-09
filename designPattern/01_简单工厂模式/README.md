@@ -63,7 +63,7 @@ public class OperationFactory
 UML for Unified Modeling Language，统一建模语言。
 
 - UML模型图汇总
-![一张总的UML概念图]()
+![一张总的UML概念图](../pics/UMLSample.jpg)
 
 - **类图**分为三层("动物"类)
   - 第一层显示类的名称，如果是抽象类，就用斜体显示;
