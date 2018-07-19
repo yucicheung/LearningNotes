@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/yucicheung/LearningNotes/xmake/cmake/t5/src/main.cpp
+curl/curl.h
+-
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+
