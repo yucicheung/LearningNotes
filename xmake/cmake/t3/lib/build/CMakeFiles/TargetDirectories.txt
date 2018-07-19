@@ -1,0 +1,8 @@
+/home/yucicheung/LearningNotes/xmake/cmake/t3/lib/build/CMakeFiles/install.dir
+/home/yucicheung/LearningNotes/xmake/cmake/t3/lib/build/CMakeFiles/list_install_components.dir
+/home/yucicheung/LearningNotes/xmake/cmake/t3/lib/build/CMakeFiles/rebuild_cache.dir
+/home/yucicheung/LearningNotes/xmake/cmake/t3/lib/build/CMakeFiles/edit_cache.dir
+/home/yucicheung/LearningNotes/xmake/cmake/t3/lib/build/CMakeFiles/hello.dir
+/home/yucicheung/LearningNotes/xmake/cmake/t3/lib/build/CMakeFiles/hello_static.dir
+/home/yucicheung/LearningNotes/xmake/cmake/t3/lib/build/CMakeFiles/install/strip.dir
+/home/yucicheung/LearningNotes/xmake/cmake/t3/lib/build/CMakeFiles/install/local.dir
