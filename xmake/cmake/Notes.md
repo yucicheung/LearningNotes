@@ -100,7 +100,9 @@ INSTALL(DIRECTORY icons scripts/ DESTINATION share/myproj
 		# 可以看到每次出现一个关键词，将其后面的内容存储为其中内容，直到碰到下一个关键词
 )
 ```
-上述执行结果会是：icons目录安装到<prefix>/share/myproj，将`scripts/`文件夹中所有内容安装到<prefix>/share/myproj;对含有"CVS"的目录不包含，对符合`srcipts/*`模式的文件，
+上述执行结果会是：icons目录安装到<prefix>/share/myproj，将`scripts/`文件夹中所有内容安装到<prefix>/share/myproj;对含有"CVS"的目录不包含，对符合`srcipts/*`模式的文件。
+如果要换个地方存放目标二进制，可以通过`SET`命令重新定义`EXECUTABLE_OUTPUT_PATH`/`LIBRARY_OUTPUT_PATH`变量来指定最终的目标二进制的位置(指最终生成的二进制可执行文件或最终共享库，不包含编译生成的中间文件。记住:**在哪里`ADD_EXECUTABLE()`/`ADD_LIBRARY()`，就在哪里加入上述修改目标文件夹的定义。**
+
 
 ## 静态库与动态库构建(t3文件夹)
 ### 任务
@@ -192,11 +194,48 @@ IF(myHeader)
 INCLUDE_DIRECTORIES(${myHeader})
 ENDIF(myHeader)
 ```
+## 模块的使用和自定义模块
+对于系统与定义的Find<name>.cmake模块，使用方法如下：
+每一个模块都会定义以下几个变量(系统预定义)：
+- <name>_FOUND:判断模块是否找到
+- <name>_INCLUDE_DIR or <name>_INCLUDES：存储include路径，当FOUND为真，INCLUDE_DIRECTORIES();
+- <name>_LIBRARY or <name>_LIBRARIES：存储library路径,当FOUND为真时，TARGET_LINK_LIBRARIES()。
 
+以下看一个复杂的例子，用<name>_FOUND控制工程特性：
+```
+SET(mySources viewer.c)
+SET(optionalSources)
+SET(optionalLibs)
 
-#### cmake的安装方式
+# 当输入选项-DENABLE_JPEG_SUPPORT以下代码生效
+FIND_PACKAGE(JPEG)
+IF(JPEG_FOUND)
+	SET(optionalSources ${optionalSources} jpegview.c)
+	INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
+	SET(optionalLibs ${optionalLibs} ${JPEG_LIBRARIES})
+	ADD_DEFINITIONS(-DENABLE_JPEG_SUPPORT)
+ENDIF(JPEG_FOUND)
 
-如果要换个地方存放目标二进制，可以通过`SET`命令重新定义`EXECUTABLE_OUTPUT_PATH`/`LIBRARY_OUTPUT_PATH`变量来指定最终的目标二进制的位置(指最终生成的二进制可执行文件或最终共享库，不包含编译生成的中间文件。记住:**在哪里`ADD_EXECUTABLE()`/`ADD_LIBRARY()`，就在哪里加入上述修改目标文件夹的定义。**
+# 当输入选项-DENABLE_PNG_SUPPORT以下代码生效
+FIND_PACKGAE(PNG)
+IF(PNG_FOUND)
+	SET(optionalSources ${optionalSources} pngview.c)
+	INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIR})
+	SET(optionalLibs ${optionalLibs} ${PNG_LIBRATIES})
+	ADD_DEFINITIONS(-DENABLE_PNG_SUPPORT)
+ENDIF(PNG_FOUND)
+
+ADD_EXECUTABLE(viewer ${mySources} ${optionalSources})
+TARGET_LINK_LIBRARIES(viewer ${optionalLibs})
+```
+
+## 编写自己的FindHello模块(t6目录)
+在CMakeLists.txt中调用的是`.cmake`模块中的变量，而cmake模块中的变量可以系统定义，也可以用户自己定义。
+
+- `FIND_PACKAGE(<name> [major.minor] [QUIET] [NO_MODULE]
+			[[REQUIRED|COMPONENTS] [components...]])`
+  - 如果指定QUIET参数，就对应编写的FindHELLO.cmake中的HELLO_FIND_QUIETLY;
+  - 指定REQUIRED参数，则找不到该链接库时不能编译，对应FindHELLO.cmake中的HELLO_FIND_REQUIRED变量。
 
 ## 指令汇总
 项目中用到的指令如下：
