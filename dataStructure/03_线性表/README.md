@@ -173,8 +173,8 @@ typedef struct Node
 }Node;
 typedef struct Node *LinkList;//LinkeList就是Node*型,要不断new并且将指针传给上一个结点的指针域
 ```
-
-## 单链表的读取
+.
+### 单链表的读取
 - 在单链表中，第i个元素到底在哪没法一开始就知道，必须从头开始找。
   - **获取链表第i个数据**的算法思路
 	- 声明一个指针p指向链表第一个结点，初始化j从1开始;
@@ -202,7 +202,7 @@ Status GetElem(LinkList L,int i,ElemType *e)
 }
 ```
 
-## 单链表的插入与删除
+### 单链表的插入与删除
 - 单链表的插入
   - 在p和p->next结点中间插入e结点
 ```c++
@@ -282,14 +282,222 @@ Status ListDelete(LinkList *L, int i, ElemType *e)
   - 插入和删除结点
 
 - 单链表数据结构在插入和删除操作上与线性表相比没有太大优势，因为在查找上花费很多时间。
-  - 但是对于插入或删除数据越频繁的操作，单链表的效率优势就越是明显。
+  - 但是**对于插入或删除数据越频繁的操作，单链表的效率优势就越是明显**。
   - 比如，从第i个位置，插入10个结点，对于顺序结构，每一次都要移动n-i个结点，而对于链表，只要进行一次查找，后续插入的时间复杂度都是O(1)。
 
-## 单链表的整表创建
+### 单链表的整表创建
 
 - 创建单链表就是一个动态生成链表的过程，即从空表的初始状态起，依次建立各元素结点。
-  - 算法思路
+  - 头插法
 	1. 声明一指针p和计数器变量i;
 	2. 初始化一空链表L;
-	3. 让L的头结点指针指向NULL
+	3. 让L的头结点指针指向NULL，即建立一个带头节点的单链表;
+	4. 循环：
+		- 生成一个新结点赋值给p;
+		- 随机生成一数字赋值给p的数据域p->data;
+		- 将p插入到头结点与前一新结点之间。
+  - 尾插法
+	1. 每次新插入的结点都放在最后。
+```c++
+/* 头插法 */
+void CreateListHead(LinkList *L,int n)
+{
+	LinkList p;
+	int i;
+	srand(time(0));
+	*L = (LinkList)malloc(sizeof(Node));
+	(*L) -> next = NULL;
+	for(i=0;i<n;i++)
+	{
+		p = (LinkList)malloc(sizeof(Node));
+		p->data = rand()%100+1;
+		p->next = (*L)->next;
+		(*L)->next = p;
+	}
+}
 
+/* 尾插法 */
+void CreateListTail(LinkList *L,  int n)
+{
+	LinkList p,r;
+	int i;
+	srand(time(0));
+	*L = (LinkList)malloc(sizeof(Node));
+	r = *L;
+	for(i=0;i<n;i++)
+	{
+		p = (Node*)malloc(sizeof(Node));
+		p->data = rand()%100+1;
+		r->next = p;
+		r = p;
+	}
+	r->next = NULL;
+}
+
+```
+### 单链表的整表删除
+- 算法思路如下
+  1. 声明一结点p和q;
+  2. 将第一个结点赋值给p;
+  3. 循环：
+	 - 将下一结点赋值给q;
+	 - 释放p;
+	 - 将q赋值给p。
+```
+//将L重置为空表
+Status ClearList(LinkList *L)
+{
+	LinkList p,q;
+	p = (*L)->next;
+	while(p)
+	{
+		q = p->next;
+		free(p);
+		p = q;
+	}
+	(*L)->next = NULL;//剩下一个空结点
+	return OK;
+}
+```
+## 静态链表
+- 对于没有指针的面向对象的语言，采用用**数组来代替指针**的形式描述单链表，即**静态链表**的形式来描述。
+  - 数组元素采用两个数据域组成，data和cur，其中cur用于存放next指针，将cur叫做游标;
+  - 数组的第一个和最后一个元素作为特殊元素，不存数据;
+  - 未被使用的数组元素称为备用链表，数组第一个元素(下标为0的元素)的cur存放备用链表的第一个结点的下标;数组的最后一个元素的cur，存放第一个有数值的元素的下标，相当于单链表中的头结点的作用。
+```c++
+#define MAXSIZE 1000
+typedef struct
+{
+	ElemType data;
+	int cur;
+}Component,StaticLinkList[MAXSIZE];
+```
+
+```c++
+//将一维数组space中各分量链成一备用链表
+Status InitList(StaticLinkList space)
+{
+	int i;
+	for (i=0;i<MAXSIZE;i++)
+		space[i].cur = i+1;
+	space[MAXSIZE-1].cur = 0;
+	return OK;
+}
+
+```
+### 静态链表的插入操作
+```c++
+//若备用空间链表非空，则返回分配的结点下标，否则返回0
+int Malloc_SLL(StaticLinkList space)
+{
+	int i = space[0].cur;
+
+	if(space[0].cur)
+		space[0].cur=space[i].cur;
+	return i;
+}
+
+```
+
+```c++
+//在L中第i个元素之前插入新的数据元素e
+Status ListInsert(StaticLinkList L,int i,ElemType e)
+{
+	int j,k,l;
+	k = MAX_SIZE - 1;
+	if(i<1||i>ListLength+1)
+		return ERROR;
+	j = Malloc_SSL(L);
+	if(j)
+	{
+		L[j].data = e;
+		for(l = 1; l<=i-1; l++)
+			k = L[k].cur;
+		L[j].cur = L[k].cur;
+		L[k].cur = j;
+		return OK;
+	}
+	return ERROR;
+}
+```
+
+### 静态链表的删除操作
+```c++
+//删除在L中第i个数据元素e
+Status ListDelete(StaticLinkList L,int i)
+{
+	int j,k;
+	if(i<1||i>ListLength(L))
+		return ERROR;
+	k = MAXSIZE - 1;
+	for(j=0;j<i;j++)
+		k = L[k].cur;
+	j = L[k].cur;
+	L[k].cur = L[j].cur;
+	Free_SSL(L,j);
+	return OK;
+}
+
+void Free_SSL(StaticLikList space, int k)
+{
+	//改正备用链表
+	space[k].cur = space[0].cur;
+	space[0].cur = k;
+}
+```
+
+- 计算静态链表长度/数据元素个数的函数
+```c++
+int ListLength(StaticLinkList L)
+{
+	int j = 0;
+	int i = L[MAXSIZE-1].cur;
+	while(i)
+	{
+		i = L[i].cur;
+		j++;
+	}
+	return j;
+}
+```
+### 循环链表
+- 将单链表中终端结点的指针端由空指针改为指向头结点，就使整个单链表形成一个环，这种头尾相接的单链表称为单循环链表，简称循环链表(cicurlar linked list)。
+- 如果想用`O(1)`的时间由链表访问到最后一个结点，就需要用指向终端结点的尾指针`rear`来表示循环列表，此时查找开始结点和终端结点都很方便了。
+```c++
+//将两个循环链表合并成一个表时
+p = rearA->next;
+q = rearB->next;
+rearA->next = q->next;
+rearB->next = p;
+free(q);
+```
+
+### 双向链表
+- 双向链表(double linked list)是在单链表的每个结点中，再设置一个指向其前驱结点的指针域。
+  - 因此双向链表中的结点都有两个指针域，一个指向直接前驱，一个指向直接后继。
+```c++
+//线性表的双向链表存储结构
+typedef struct DulNode
+{
+	ElemType data;
+	struct DulNode *prior;
+	struct DulNode *next;
+}DulNode, *DuLinkList;
+```
+
+- 双向链表插入结点
+```c++
+//将结点s插入到结点p和p->next之间
+s -> prior = p;
+s->next = p->next;
+p->next->prior = s;
+p->next = s;
+```
+
+- 双向链表删除结点
+```c++
+//将p结点从前驱和后继结点之中删除
+p->prior->next = p->next;
+p->next->prior = p->prior;
+free(p);
+```
