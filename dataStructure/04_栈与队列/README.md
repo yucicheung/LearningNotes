@@ -284,4 +284,57 @@ Status DeQueue(SqQueue *Q,QElemType *e)
 }
 ```
 ### 队列链式存储结构及实现
+队列的链式存储结构，其实就是线性表的单链表，只不过只能头进尾出而已。这个结构称为**链队列**。
+空队列时，front和rear指针都指向头结点。
 
+- 链队列的结构为
+```c
+typedef int QElemType;
+
+typedef struct QNode
+{
+	QElemType data;
+	struct QNode* next;
+}QNode,*QueuePtr;
+
+typedef struct
+{
+	QueuePtr front,rear;
+}LinkQueue;
+```
+
+- 链队列的入队操作
+```c
+//插入元素e为Q的新的队尾元素
+Status EnQueue(LinkQueue *Q,QElemType e)
+{
+	QueuePtr s = (QueuePtr)malloc(sizeof(QNode));
+	if(!s)//存储分配失败
+		exit(OVERFLOW);
+	s->data = e;
+	s->next = NULL;
+	Q->rear->next = s;
+	Q->rear = s;
+
+	return OK;	
+}
+```
+
+- 链式队的出队操作：头结点的后继结点出队，将头结点的后继改为它后面的结点，若链表除头结点外只剩一个元素时，则需将rear指向头结点。
+```c
+//若队列不空，删除Q的对于元素，用e返回其值，并返回OK,否则返回ERROR
+Status DeQueue(LinkQueue *Q, QElemType *e)
+{
+	QueuePtr p;
+	if (Q->front ==Q->rear) return ERROR;
+	p = Q->front->next;
+	*e = p->data;
+	Q->front->next = p->next;
+	if(Q->rear==p)//如果要删除的元素是队尾,则队尾指针需要改变
+		Q->rear = Q->front;
+	free(p);
+	return OK;
+}
+```
+
+总的来说，在确定队列长度最大值的情况下，建议用循环队列，如果无法预估队列长度时，采用链式队列。
