@@ -14,6 +14,12 @@ using namespace std;
 
 int main()
 {
+    vector<int> vi_;
+    vi_={1,2,3,4,5};
+    for(auto& avi:vi_)
+        cout<<avi<<endl;
+
+
     vector<int> veci(3,8);
     cout<<veci.size()<<endl;
     cout<<veci.capacity()<<endl;
@@ -29,5 +35,6 @@ int main()
     printf("%d\n",veci.size());
     printf("%d\n",veci.begin());
     printf("%d\n",veci.end());
+
     return 0;
 }
